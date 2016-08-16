@@ -30,9 +30,13 @@ class Struts():
         A = (y1 - y2)
         B = (x2 - x1)
         C = (y2*x1 - y1*x2)
-        return math.fabs(C / math.sqrt(A ** 2 + B ** 2))
+        return math.fabs(C / math.sqrt(A ** 2 + B ** 2)) / 1000.0
 
-
+    def distance_extend(self):
+        pt_att = self.get_att()
+        x1, y1 = pt_att
+        x2, y2 = self._pt_sat
+        return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
     def t2f(self, torque):
         """

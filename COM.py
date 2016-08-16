@@ -77,7 +77,7 @@ if __name__ == "__main__":
             torq_dis.append(compute_torque(com, angle) / 1000.0)
         plt.plot(angles, torq_dis)
         plt.ylabel("Torque (Nm)")
-        plt.xlabel("Tile (degree)")
+        plt.xlabel("Tilt (degree)")
         plt.show()
 
         print "Max torque: ", math.sqrt(com.x ** 2 + com.y ** 2) * 9.807 * com.m / 1000
