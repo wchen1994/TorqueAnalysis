@@ -58,7 +58,7 @@ def compute_torque(point, tilt):
     adjancent = point.x
     cos = adjancent / hypotenuse
     sin = opposite / hypotenuse
-    tilt = math.pi * tilt / 180.0
+    tilt = -math.pi * tilt / 180.0
     new_cos = cos * math.cos(tilt) + sin * math.sin(tilt)
     return hypotenuse * new_cos * point.m * 9.807
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         print "Center of mass: ", com
 
         torq_dis = []
-        angles = range(90)
+        angles = range(10)
         for angle in angles:
             torq_dis.append(compute_torque(com, angle) / 1000.0)
         plt.plot(angles, torq_dis)
