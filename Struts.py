@@ -1,14 +1,19 @@
 import math
 from matplotlib import pyplot as plt
 
+DEBUG=False
+
 class Struts():
     def __init__(self, point_att, point_sat):
         self._pt_att = point_att
         self._pt_sat = point_sat
         self._tilt = 0
         self.max_force = 800.0
-        self.min_len = 510.0
-        self.max_len = 210.0
+        self.min_len = 210.0
+        self.max_len = 510.0
+
+    def set_force(self, force):
+        self.max_force = force
 
     def tilt(self, angle):
         self._tilt = angle
@@ -42,14 +47,18 @@ class Struts():
         return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
     def compute_force(self):
-        dist = distance_extend()
+        """
+        Assum constant force
+        """
+        dist = self.distance_extend()
         if dist < self.min_len:
-            print "Can not achieve this short length"
+            print "Can not shorter than: ", self.min_len
             return -1
         if dist > self.max_len:
-            print "Length exceed"
+            if DEBUG:
+                print "Length exceed"
             return self.max_force
-        return self.max_force * (dist - self.min_len) / (self.max_len - self.min_len)
+        return self.max_force
 
     def t2f(self, torque):
         """
