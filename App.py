@@ -25,13 +25,13 @@ for idx in range(len(angles)):
     struts_dists.append(struts.distance_extend())
 
 # Add CounterWeight
-counter_weight = COM.Point(-500,0,15)
+counter_weight = COM.Point(-480,0,15)
 for idx in range(len(angles)):
     torq = COM.compute_torque(counter_weight, angles[idx]) / 1000.0
     torq_dis[idx] += torq
 
 # Calculate shaft force required vs tilt angle to withstand the torque
-shaft = Struts.Struts([-500,0], [0,-800])
+shaft = Struts.Struts([-480,0], [0,-680])
 shaft_forces = []
 for idx in range(len(angles)):
     shaft.tilt(angles[idx])
