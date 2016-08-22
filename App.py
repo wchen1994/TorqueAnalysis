@@ -16,7 +16,7 @@ for angle in angles:
 
 # Add two gas struts
 struts = Struts.Struts([260,-430], [30,-300])
-struts.set_force(300)
+struts.set_force(400)
 struts_dists = []
 for idx in range(len(angles)):
     struts.tilt(angles[idx])
@@ -35,7 +35,7 @@ shaft = Struts.Struts([-480,0], [0,-680])
 shaft_forces = []
 for idx in range(len(angles)):
     shaft.tilt(angles[idx])
-    shaft_forces.append(struts.t2f(torq_dis[idx]))
+    shaft_forces.append(shaft.t2f(torq_dis[idx]))
 
 # Log data
 print "Force range from: ", min(shaft_forces), "to", max(shaft_forces)
