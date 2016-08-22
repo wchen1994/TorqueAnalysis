@@ -3,58 +3,64 @@ import Struts
 import math
 from matplotlib import pyplot as plt
 
-# Load data and compute center of mass
-points = COM.load_points("data.csv")
-com = COM.compute_com(points)
-print "Center of mass: ", com
+class Simulate():
+    def __init__(self):
+        self._plot = True
 
-# Calculate torque vs tilt angle
-torq_dis = []
-angles = range(20,80)
-for angle in angles:
-    torq_dis.append(COM.compute_torque(com, angle) / 1000.0)
+    def sim(self, struts_force, counter_weight):
+        # Load data and compute center of mass
+        points = COM.load_points("data.csv")
+        com = COM.compute_com(points)
+        print "Center of mass: ", com
 
-# Add two gas struts
-struts = Struts.Struts([260,-430], [30,-300])
-struts.set_force(400)
-struts_dists = []
-for idx in range(len(angles)):
-    struts.tilt(angles[idx])
-    torq = struts.f2t(2 * struts.compute_force())
-    torq_dis[idx] -= torq
-    struts_dists.append(struts.distance_extend())
+        # Calculate torque vs tilt angle
+        torq_dis = []
+        angles = range(20,80)
+        for angle in angles:
+            torq_dis.append(COM.compute_torque(com, angle) / 1000.0)
 
-# Add CounterWeight
-counter_weight = COM.Point(-480,0,15)
-for idx in range(len(angles)):
-    torq = COM.compute_torque(counter_weight, angles[idx]) / 1000.0
-    torq_dis[idx] += torq
+        # Add two gas struts
+        struts = Struts.Struts([260,-430], [30,-300])
+        struts.set_force(struts_force)
+        struts_dists = []
+        for idx in range(len(angles)):
+            struts.tilt(angles[idx])
+            torq = struts.f2t(2 * struts.compute_force())
+            torq_dis[idx] -= torq
+            struts_dists.append(struts.distance_extend())
 
-# Calculate shaft force required vs tilt angle to withstand the torque
-shaft = Struts.Struts([-480,0], [0,-680])
-shaft_forces = []
-for idx in range(len(angles)):
-    shaft.tilt(angles[idx])
-    shaft_forces.append(shaft.t2f(torq_dis[idx]))
+        # Add CounterWeight
+        counter_weight = COM.Point(-480,0,counter_weight)
+        for idx in range(len(angles)):
+            torq = COM.compute_torque(counter_weight, angles[idx]) / 1000.0
+            torq_dis[idx] += torq
 
-# Log data
-print "Force range from: ", min(shaft_forces), "to", max(shaft_forces)
-print "Distance range from: ", min(struts_dists), "to", max(struts_dists)
+        # Calculate shaft force required vs tilt angle to withstand the torque
+        shaft = Struts.Struts([-480,0], [0,-680])
+        shaft_forces = []
+        for idx in range(len(angles)):
+            shaft.tilt(angles[idx])
+            shaft_forces.append(shaft.t2f(torq_dis[idx]))
 
-# Plot
-if True:
-    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3)
+        # Log data
+        print "Force range from: ", min(shaft_forces), "to", max(shaft_forces)
+        print "Distance range from: ", min(struts_dists), "to", max(struts_dists)
 
-    ax0.plot(angles, torq_dis)
-    ax0.set_xlabel("Tilt (degree)")
-    ax0.set_ylabel("Net Torque (Nm)")
+        # Plot
+        if self._plot:
+            fig, (ax0, ax1, ax2) = plt.subplots(nrows=3)
 
-    ax1.plot(angles, struts_dists)
-    ax1.set_xlabel("Tilt (degree)")
-    ax1.set_ylabel("Struts length (mm)")
+            ax0.plot(angles, torq_dis)
+            ax0.set_xlabel("Tilt (degree)")
+            ax0.set_ylabel("Net Torque (Nm)")
 
-    ax2.plot(angles, shaft_forces)
-    ax2.set_xlabel("Tilt (degree)")
-    ax2.set_ylabel("Shaft Force(N)")
+            ax1.plot(angles, struts_dists)
+            ax1.set_xlabel("Tilt (degree)")
+            ax1.set_ylabel("Struts length (mm)")
 
-    plt.show()
+            ax2.plot(angles, shaft_forces)
+            ax2.set_xlabel("Tilt (degree)")
+            ax2.set_ylabel("Shaft Force(N)")
+
+            plt.show()
+        return (min(shaft_forces), max(shaft_forces))
