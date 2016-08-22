@@ -64,3 +64,7 @@ class Simulate():
 
             plt.show()
         return (min(shaft_forces), max(shaft_forces))
+
+if __name__ == '__main__':
+    foo = Simulate()
+    foo.sim(375, 15)
