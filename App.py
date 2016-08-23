@@ -19,21 +19,23 @@ class Simulate():
         for angle in angles:
             torq_dis.append(COM.compute_torque(com, angle) / 1000.0)
 
-        # Add two gas struts
-        struts = Struts.Struts([260,-430], [30,-300])
-        struts.set_force(struts_force)
-        struts_dists = []
-        for idx in range(len(angles)):
-            struts.tilt(angles[idx])
-            torq = struts.f2t(2 * struts.compute_force())
-            torq_dis[idx] -= torq
-            struts_dists.append(struts.distance_extend())
-
         # Add CounterWeight
         counter_weight = COM.Point(-480,0,counter_weight)
         for idx in range(len(angles)):
             torq = COM.compute_torque(counter_weight, angles[idx]) / 1000.0
             torq_dis[idx] += torq
+
+        # Add two gas struts
+        struts = Struts.Struts([260,-430], [30,-300])
+        struts.set_force(struts_force)
+        struts_dists = []
+        struts_forces = [] # Forces required when there is only frame torque
+        for idx in range(len(angles)):
+            struts.tilt(angles[idx])
+            struts_forces.append(struts.t2f(torq_dis[idx]))
+            torq = struts.f2t(2 * struts.compute_force())
+            torq_dis[idx] -= torq
+            struts_dists.append(struts.distance_extend())
 
         # Calculate shaft force required vs tilt angle to withstand the torque
         shaft = Struts.Struts([-480,0], [0,-680])
@@ -58,13 +60,21 @@ class Simulate():
             ax1.set_xlabel("Tilt (degree)")
             ax1.set_ylabel("Struts length (mm)")
 
-            ax2.plot(angles, shaft_forces)
+            # plot the shaft force
+            #ax2.plot(angles, shaft_forces)
+            #ax2.set_xlabel("Tilt (degree)")
+            #ax2.set_ylabel("Shaft Force(N)")
+
+            # plot the struts force when there is only frame torque
+            ax2.plot(angles, struts_forces)
             ax2.set_xlabel("Tilt (degree)")
-            ax2.set_ylabel("Shaft Force(N)")
+            ax2.set_ylabel("Struts Force(N)")
+
 
             plt.show()
         return (min(shaft_forces), max(shaft_forces))
 
 if __name__ == '__main__':
     foo = Simulate()
-    foo.sim(375, 15)
+    #foo.sim(375, 15)
+    foo.sim(0, 15)
