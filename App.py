@@ -15,7 +15,7 @@ class Simulate():
 
         # Calculate torque vs tilt angle
         torq_dis = []
-        angles = range(20,80)
+        angles = range(0,80)
         for angle in angles:
             torq_dis.append(COM.compute_torque(com, angle) / 1000.0)
 
@@ -45,6 +45,7 @@ class Simulate():
             shaft_forces.append(shaft.t2f(torq_dis[idx]))
 
         # Log data
+        print "Torque range from: ", min(torq_dis), "to", max(torq_dis)
         print "Force range from: ", min(shaft_forces), "to", max(shaft_forces)
         print "Distance range from: ", min(struts_dists), "to", max(struts_dists)
 
@@ -61,14 +62,14 @@ class Simulate():
             ax1.set_ylabel("Struts length (mm)")
 
             # plot the shaft force
-            #ax2.plot(angles, shaft_forces)
-            #ax2.set_xlabel("Tilt (degree)")
-            #ax2.set_ylabel("Shaft Force(N)")
+            ax2.plot(angles, shaft_forces)
+            ax2.set_xlabel("Tilt (degree)")
+            ax2.set_ylabel("Shaft Force(N)")
 
             # plot the struts force when there is only frame torque
-            ax2.plot(angles, struts_forces)
-            ax2.set_xlabel("Tilt (degree)")
-            ax2.set_ylabel("Struts Force(N)")
+            #ax2.plot(angles, struts_forces)
+            #ax2.set_xlabel("Tilt (degree)")
+            #ax2.set_ylabel("Struts Force(N)")
 
 
             plt.show()
@@ -76,5 +77,5 @@ class Simulate():
 
 if __name__ == '__main__':
     foo = Simulate()
-    #foo.sim(375, 15)
-    foo.sim(0, 15)
+    foo.sim(550, 15)
+    #foo.sim(0, 0)
