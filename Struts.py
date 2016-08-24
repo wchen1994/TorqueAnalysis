@@ -8,12 +8,12 @@ class Struts():
         self._pt_att = point_att
         self._pt_sat = point_sat
         self._tilt = 0
-        self.max_force = 800.0
+        self.max_force = 0.0
         self.min_len = 210.0
         self.max_len = 510.0
 
     def set_force(self, force):
-        self.max_force = force
+        self.max_force = float(force)
 
     def tilt(self, angle):
         self._tilt = angle

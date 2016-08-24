@@ -60,7 +60,19 @@ def compute_torque(point, tilt):
     sin = opposite / hypotenuse
     tilt = -math.pi * tilt / 180.0
     new_cos = cos * math.cos(tilt) + sin * math.sin(tilt)
+    new_sin = sin * math.cos(tilt) - cos * math.sin(tilt)
     return hypotenuse * new_cos * point.m * 9.807
+
+def compute_new_com(point, tilt):
+    hypotenuse = math.sqrt(point.x ** 2 + point.y ** 2)
+    opposite = point.y
+    adjancent = point.x
+    cos = adjancent / hypotenuse
+    sin = opposite / hypotenuse
+    tilt = -math.pi * tilt / 180.0
+    new_cos = cos * math.cos(tilt) + sin * math.sin(tilt)
+    new_sin = sin * math.cos(tilt) - cos * math.sin(tilt)
+    return new_cos * hypotenuse, new_sin * hypotenuse
 
 if __name__ == "__main__":
     """
