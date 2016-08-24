@@ -75,7 +75,19 @@ class Simulate():
             plt.show()
         return (min(shaft_forces), max(shaft_forces))
 
+    def snap(self, angle):
+        # Load data and compute center of mass
+        points = COM.load_points("data.csv")
+        com = COM.compute_com(points)
+
+        # compute torque
+        toraue = COM.compute_torque(com, angle)
+
+
+
 if __name__ == '__main__':
     foo = Simulate()
-    foo.sim(550, 15)
+    #foo.sim(550, 15)
     #foo.sim(0, 0)
+
+    foo.snap()
