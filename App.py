@@ -21,14 +21,16 @@ class Simulate():
 
         # Add CounterWeight
         tmp = []
-        counter_weight = COM.Point(-480,0,counter_weight)
+        #counter_weight = COM.Point(-480,0,counter_weight)
+        counter_weight = COM.Point(-700,0,counter_weight)
         for idx in range(len(angles)):
             torq = COM.compute_torque(counter_weight, angles[idx]) / 1000.0
             tmp.append(torq)
             torq_dis[idx] += torq
 
         # Add two gas struts
-        struts = Struts.Struts([260,-430], [30,-300])
+        #struts = Struts.Struts([260,-430], [30,-300])
+        struts = Struts.Struts([480,-480], [30,-300])
         struts.set_force(struts_force)
         struts_dists = []
         struts_forces = [] # Forces required when there is only frame torque
@@ -64,16 +66,17 @@ class Simulate():
             ax1.set_xlabel("Tilt (degree)")
             ax1.set_ylabel("Struts length (mm)")
 
-            # plot the shaft force
-            ax2.plot(angles, shaft_forces)
-            ax2.set_xlabel("Tilt (degree)")
-            ax2.set_ylabel("Shaft Force(N)")
 
-            # plot the struts force when there is only frame torque
-            #ax2.plot(angles, struts_forces)
-            #ax2.set_xlabel("Tilt (degree)")
-            #ax2.set_ylabel("Struts Force(N)")
-
+            if True:
+                # plot the shaft force
+                ax2.plot(angles, shaft_forces)
+                ax2.set_xlabel("Tilt (degree)")
+                ax2.set_ylabel("Shaft Force(N)")
+            else:
+                # plot the struts force when there is only frame torque
+                ax2.plot(angles, struts_forces)
+                ax2.set_xlabel("Tilt (degree)")
+                ax2.set_ylabel("Struts Force(N)")
 
             plt.show()
         return (min(shaft_forces), max(shaft_forces))
@@ -106,7 +109,7 @@ class Simulate():
 
 if __name__ == '__main__':
     foo = Simulate()
-    foo.sim(520, 26)
+    foo.sim(150, 48)
     #foo.sim(0, 0)
 
-    #print foo.snap(80, 26)
+    #print foo.snap(80, 15)
